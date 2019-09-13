@@ -34,14 +34,8 @@ public class LIMS extends Application {
      */
     public static void main(String[] args) throws SQLException, Exception {
         
-        DatabaseConnector connector = new DatabaseConnector();
-        Connection connection = connector.makeConection("192.168.1.29", "3306", "lims", "admin", "hgsit!");
-        
-        System.out.println(connector.viewUsers(connection));
-        
         launch(args);
-        
-        connection.close();
+
     }
     
 }
