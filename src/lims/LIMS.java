@@ -21,10 +21,12 @@ public class LIMS extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
+        
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
         
         Scene scene = new Scene(root);
         
+        stage.setTitle("LIMS 0.0.1");
         stage.setScene(scene);
         stage.show();
     }

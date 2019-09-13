@@ -14,7 +14,7 @@ public class Test {
         DatabaseConnector connector = new DatabaseConnector();
         Connection connection = connector.makeConection("192.168.1.29", "3306", "lims", "admin", "hgsit!");
         
-        String projectName = "testProject1111";
+        String projectName = "testProject11111";
         String username = "Logan";
         String password = "password1";
         
