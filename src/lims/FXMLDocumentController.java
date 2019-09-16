@@ -6,30 +6,64 @@
 package lims;
 
 import java.net.URL;
+import java.sql.Connection;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 /**
  *
  * @author Logan
  */
-public class FXMLDocumentController implements Initializable {
+public class FXMLDocumentController implements Initializable  {
+    
+    DatabaseConnector connector = new DatabaseConnector();
     
     @FXML
-    private Label label;
+    Button exit;
+    @FXML
+    Button login;
+    @FXML
+    TextField username_field;
+    @FXML
+    TextField password_field;
     
     @FXML
-    private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
-        label.setText("Hello World!");
+    private void handleButtonAction(ActionEvent event){
+        System.exit(1);
+    }
+    
+    @FXML
+    private void submitLogin(ActionEvent event) throws Exception {
+        
+        String username = username_field.getText();
+        String password = password_field.getText();
+        DatabaseConnector connector = new DatabaseConnector();
+        Connection connection = connector.makeConection("192.168.1.29", "3306", "lims", "admin", "hgsit!");
+        
+        if(connector.confirmAuthentication(connection, username, password)){
+            System.out.println("Log-In Success");
+            Parent pane = FXMLLoader.load(getClass().getResource("lims_loggedin.fxml"));
+            Scene scene = new Scene( pane );
+            Stage curStage = (Stage) login.getScene().getWindow();
+            curStage.setScene(scene);
+            
+        }else{
+            System.out.println("Log-In Failed");
+        }
     }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        
     }    
     
 }
