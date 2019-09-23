@@ -6,7 +6,6 @@
 package lims;
 
 import java.net.URL;
-import java.sql.Connection;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,7 +24,7 @@ import javafx.stage.Stage;
  */
 public class FXMLDocumentController implements Initializable  {
     
-    DatabaseConnector connector = new DatabaseConnector();
+    public DatabaseConnector connector = new DatabaseConnector();
     
     @FXML
     Button exit;
@@ -46,12 +45,11 @@ public class FXMLDocumentController implements Initializable  {
         
         String username = username_field.getText();
         String password = password_field.getText();
-        DatabaseConnector connector = new DatabaseConnector();
-        Connection connection = connector.makeConection("192.168.1.29", "3306", "lims", "admin", "hgsit!");
+        connector.makeConection("192.168.1.29", "3306", "lims", "admin", "hgsit!");
         
-        if(connector.confirmAuthentication(connection, username, password)){
+        if(connector.confirmAuthentication(username, password)){
             System.out.println("Log-In Success");
-            Parent pane = FXMLLoader.load(getClass().getResource("lims_loggedin.fxml"));
+            Parent pane = FXMLLoader.load(getClass().getResource("receivingPage.fxml"));
             Scene scene = new Scene( pane );
             Stage curStage = (Stage) login.getScene().getWindow();
             curStage.setScene(scene);
