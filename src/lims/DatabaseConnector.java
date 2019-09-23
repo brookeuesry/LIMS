@@ -9,21 +9,36 @@ import java.sql.*;
 
 public class DatabaseConnector {
     
+    private Connection con;
+    
+    public DatabaseConnector(Connection connection){
+        con = connection;
+    }
+    
+    public DatabaseConnector(){
+        con = null;
+    }
+    
+    
     //This makes a connection to the given database
-    public Connection makeConection(String ip,String port, String databaseName, String username,String password) throws SQLException, Exception{
+    public void makeConection(String ip,String port, String databaseName, String username,String password) throws SQLException, Exception{
         try {
-            Connection con = DriverManager.getConnection("jdbc:mysql://" + ip + ":" + port + "/" + databaseName,username,password);
+            Connection connection = DriverManager.getConnection("jdbc:mysql://" + ip + ":" + port + "/" + databaseName,username,password);
             
-            return con;
+            con = connection;
         } 
         catch (Exception e) {
            System.out.println(e);
         }
-        throw new Exception("CONNECTOR IS NULL");
+    }
+    
+    //This closes the database conenction
+    public void closeConnection() throws SQLException{
+        con.close();
     }
     
     //This lists the users in the database
-    public String viewUsers(Connection con) throws SQLException, Exception{
+    public String viewUsers() throws SQLException, Exception{
          
         //Make a blank output string
         String output = "";
@@ -58,10 +73,89 @@ public class DatabaseConnector {
     }
     
     //Make new project (table)
-    public void newProject(Connection con, String newProjectName) throws SQLException{
+    public void newProject(String newProjectName) throws SQLException{
         
         //Make a query
-        String query = "CREATE TABLE `lims`.`" + newProjectName + "` (\n" + "  `id` INT NOT NULL AUTO_INCREMENT,\n" + "  PRIMARY KEY (`id`),\n" + "  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)";
+        String query = "CREATE TABLE `" + newProjectName +"` (" +
+            "`recordNumber` int(11) NOT NULL AUTO_INCREMENT," +
+            "`legionellaStatus` varchar(255) DEFAULT NULL," +
+            "`dateInProcessing` datetime DEFAULT NULL," +
+            "`timeInProcessing` datetime DEFAULT NULL," +
+            "`personInProcessing` varchar(255) DEFAULT NULL," +
+            "`blankInformation` varchar(255) DEFAULT NULL," +
+            "`fieldID` varchar(255) DEFAULT NULL," +
+            "`SIN` varchar(255) DEFAULT NULL," +
+            "`colorID` varchar(255) DEFAULT NULL," +
+            "`waterType` varchar(255) DEFAULT NULL," +
+            "`abnormailitiesInProcessing` varchar(255) DEFAULT NULL," +
+            "`incubator` varchar(255) DEFAULT NULL," +
+            "`detectionLimit` varchar(255) DEFAULT NULL," +
+           "`conditionOfBox` varchar(255) DEFAULT NULL," +
+            "`analystMembraneConcentration` varchar(255) DEFAULT NULL," +
+            "`dateMembraneConcentration` datetime DEFAULT NULL," +
+            "`timeMembraneConcentration` datetime DEFAULT NULL," +
+            "`abnormalitiesMembraneConcentration` varchar(255) DEFAULT NULL," +
+            "`analystTreatment` varchar(255) DEFAULT NULL," +
+            "`dateTreatment` datetime DEFAULT NULL," +
+            "`timeTreatment` datetime DEFAULT NULL," +
+            "`abnormalitiesTreatment` varchar(255) DEFAULT NULL," +
+            "`analystInoculation` varchar(255) DEFAULT NULL," +
+            "`dateIncoulation` datetime DEFAULT NULL," +
+            "`timeInoculation` datetime DEFAULT NULL," +
+            "`abnormailitiesInoculation` varchar(255) DEFAULT NULL," +
+            "`analystNT` varchar(255) DEFAULT NULL," +
+            "`dateNT` datetime DEFAULT NULL," +
+            "`dayReadNT` int(11) DEFAULT NULL," +
+            "`observationsNT` varchar(255) DEFAULT NULL," +
+            "`observationActionNT` varchar(255) DEFAULT NULL," +
+            "`analystAT` varchar(255) DEFAULT NULL," +
+            "`dateAT` datetime DEFAULT NULL," +
+            "`dayReadAT` int(11) DEFAULT NULL," +
+            "`observationsAT` varchar(255) DEFAULT NULL," +
+            "`observationActionAT` varchar(255) DEFAULT NULL," +
+            "`enumerationNT` int(11) DEFAULT NULL," +
+            "`enumerationAT` int(11) DEFAULT NULL," +
+            "`analystHT` varchar(255) DEFAULT NULL," +
+            "`dateHT` datetime DEFAULT NULL," +
+            "`datReadHT` int(11) DEFAULT NULL," +
+            "`observationsHT` varchar(255) DEFAULT NULL," +
+            "`observationActionHT` varchar(255) DEFAULT NULL," +
+            "`enumerationHT` int(11) DEFAULT NULL," +
+            "`analystBCYE` varchar(255) DEFAULT NULL," +
+            "`dateBCYE` datetime DEFAULT NULL," +
+            "`postDaysBCYE` int(11) DEFAULT NULL," +
+            "`bcyeLot` varchar(255) DEFAULT NULL," +
+            "`bcyeCYSTLot` varchar(255) DEFAULT NULL," +
+            "`treatedPlateSubbed` varchar(255) DEFAULT NULL," +
+            "`observationBCYE` varchar(255) DEFAULT NULL," +
+            "`analystAgglutination` varchar(255) DEFAULT NULL," +
+            "`dateAgglutination` datetime DEFAULT NULL," +
+            "`postDaysAgglutination` int(11) DEFAULT NULL," +
+            "`hydrationLogAgglutination` varchar(255) DEFAULT NULL," +
+            "`serogroup1Agglutination` varchar(255) DEFAULT NULL," +
+            "`serogroup2to15Agglutination` varchar(255) DEFAULT NULL," +
+            "`speciesLotAgglutination` varchar(255) DEFAULT NULL," +
+            "`observationAgglutination` varchar(255) DEFAULT NULL," +
+            "`analystPerformed110Dillution` varchar(255) DEFAULT NULL," +
+            "`datePerformed110Dillution` datetime DEFAULT NULL," +
+            "`postDaysPerformed110Dillution` int(11) DEFAULT NULL," +
+            "`time110Dillution` datetime DEFAULT NULL," +
+            "`abnormailities110Dillution` varchar(255) DEFAULT NULL," +
+            "`analystRead110Dillution` varchar(255) DEFAULT NULL," +
+            "`dateRead110Dillution` datetime DEFAULT NULL," +
+            "`postDaysRead110Dillution` int(11) DEFAULT NULL," +
+            "`observationsRead110Dillution` varchar(255) DEFAULT NULL," +
+            "`analystPerformed1100Dillution` varchar(255) DEFAULT NULL," +
+            "`datePerformed1100Dillution` datetime DEFAULT NULL," +
+            "`timePerformed1100Dillution` datetime DEFAULT NULL," +
+            "`abnormalitiesPerformed1100Dillution` varchar(255) DEFAULT NULL," +
+            "`analystRead1100Dillution` varchar(255) DEFAULT NULL," +
+            "`dateRead1100Dillution` datetime DEFAULT NULL," +
+            "`postDaysRead1100Dillution` int(11) DEFAULT NULL," +
+            "`postDaysPerformed1100Dillution` int(11) DEFAULT NULL," +
+            "`observationsRead1100Dillution` varchar(255) DEFAULT NULL," +
+            "PRIMARY KEY (`recordNumber`)" +
+          ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
         
         //You will need to add 
         if(con != null){
@@ -81,11 +175,10 @@ public class DatabaseConnector {
             st.close();
         }
         
-        //Add new project to projectnames table 
     }
     
     //Check Login Information Against Database Credentials
-    public boolean  confirmAuthentication(Connection con, String username, String password) throws SQLException, Exception{
+    public boolean  confirmAuthentication(String username, String password) throws SQLException, Exception{
         //Make a blank output string
         String output = "";
         
@@ -114,7 +207,7 @@ public class DatabaseConnector {
         throw new Exception("Cannot execute statement: database connector is NULL");
     }
     
-    public void audit(Connection con,String username, String projectName,String actionTaken) throws SQLException{
+    public void audit(String username, String projectName,String actionTaken) throws SQLException{
         
         //Create the insert query
         String query = "INSERT INTO audit (username,projectName,actionTaken) VALUES (\'" + username + "\',\'" + projectName + "\',\'" + actionTaken + "\')";
@@ -134,7 +227,7 @@ public class DatabaseConnector {
     }
     
     //This is a genericRead on a column. It can only read strings, and it should be edited to have a WHERE sampleID == IDOFPAGE or something
-    public String genericRead(Connection con,String table,String columnToRead) throws SQLException, Exception{
+    public String genericRead(String table,String columnToRead) throws SQLException, Exception{
               
         //Make a blank output string
         String output = "";
@@ -163,5 +256,46 @@ public class DatabaseConnector {
         else{
             throw new Exception("Cannot execute statement: database connector is NULL");
         }
+    }
+    
+    //This is a generic write to a table. It will only make a new row and only if you use the primary key as the write (and it's not Auto Increment)
+    public void genericWriteString(String table, String columnToWrite,String value) throws SQLException{
+        //Make sure connection is valid
+        if(con != null){
+            //Create the java statement
+            Statement st = con.createStatement();
+
+            //Create query for entry into table
+            String query = "INSERT INTO " + table + " (" + columnToWrite + ") VALUES (\'" + value + "\')";
+
+            //Execute the query
+            st.executeUpdate(query);
+            
+            //Close the statement
+            st.close();
+        }
+    }
+   
+    //This is a generic update. This will allow you to change a row. Might be able to make this generic by using Object instead of string.
+    public void genericUpdateString(String table, String primaryKeyColumn, String rowIdentifier, String columnToUpdate, String value) throws SQLException{
+        //Make sure connection is valid
+        if(con != null){
+            //Create the java statement
+            Statement st = con.createStatement();
+
+            //Create query for update into table
+            String query = "UPDATE " + table + " SET " + columnToUpdate + " = \'" + value + "\' WHERE (" + primaryKeyColumn + " = \'" + rowIdentifier + "\');" ;
+
+            //Execute the query
+            st.executeUpdate(query);
+            
+            //Close the statement
+            st.close();
+        }
+    }
+    
+    //GETTERS
+    public Connection getConnection(){
+        return con;
     }
 }
